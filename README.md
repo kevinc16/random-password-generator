@@ -15,11 +15,10 @@ os
 
 ### Installing
 
-```
 [Installation](https://www.ics.uci.edu/~pattis/common/handouts/pythoneclipsejava/python.html)
 
 [Running file](https://www.pythoncentral.io/execute-python-script-file-shell/)
-```
+
 
 ## Built With
 
