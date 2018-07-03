@@ -62,7 +62,7 @@ class RandomPassGen(tk_window.Frame):
         newFile = open(file_dir, 'w+')
         newFile.write(file_name + '\n')
         newFile.write("Username:" + username + '\n')
-        newFile.write("gen_passord:" + gen_pass)
+        newFile.write("Password:" + gen_pass)
         newFile.close()
         #changes file to read only
         os.chmod(file_dir, S_IREAD|S_IRGRP|S_IROTH)
