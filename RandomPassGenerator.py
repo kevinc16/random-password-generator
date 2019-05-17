@@ -13,10 +13,9 @@ from tkinter import Tk
 import tkinter as tk_window
 from tkinter import messagebox
 from tkinter.font import Font
+from tkinter import IntVar
 
 class RandomPassGen(tk_window.Frame): #using class 
-
-    char = string.ascii_letters + string.digits #characters to select from when creating random password
 
     window = None #the window associated with the GUI when putting components on
     #initiates variables
@@ -27,20 +26,27 @@ class RandomPassGen(tk_window.Frame): #using class
 
     #self references to this instance of the class
     def __init__(self): 
-        self.length = random.randint(14,18)
+        self.length = random.randint(12,16)
         self.file_name = ""
         self.username = ""
         self.window = tk_window.Tk()
 
     #function used to generate password
-    def gen_pass_method(self, length):
+    def gen_pass_method(self, length, uppercase, special_char):
         gen_pass = ""
+        char = string.ascii_letters + string.digits #characters to select from when creating random password
         for i in range(length):
-            gen_pass += random.choice(self.char)
+            gen_pass += random.choice(char)
+
+        if (uppercase.get()):
+            gen_pass += string.ascii_uppercase[random.randint(0,len(string.ascii_uppercase) - 1)] #adds a random uppercase letter to password
+        if (special_char.get()):
+            s_char = "!@#$%^&*()-+=_"
+            gen_pass += s_char[random.randint(0,len(s_char) - 1)] #adds a random special character to password
         return gen_pass
 
     #function that specifies what happens after a button is clicked (the OK button)
-    def button_click(self, username_entry, file_name_entry, generated_pass):
+    def button_click(self, username_entry, file_name_entry, generated_pass, uppercase, special_char):
         if (file_name_entry.get() == '' or username_entry.get() == ''):
             messagebox.showwarning(title="Warning", message="You have not entered a value for one of the fields.")
         else:
@@ -48,7 +54,7 @@ class RandomPassGen(tk_window.Frame): #using class
                 file_name = file_name_entry.get()
                 username = username_entry.get()
 
-                self.gen_pass = self.gen_pass_method(self.length)
+                self.gen_pass = self.gen_pass_method(self.length, uppercase, special_char)
                 self.create_file(file_name,username, self.gen_pass) #calls the create file function to actually create the file
 
                 generated_pass.configure(state = 'normal')
@@ -89,9 +95,9 @@ if __name__ == "__main__":
     title.pack()
 
     #creating decription
-    desc = tk_window.Text(rand.window, height = 5, width = 40, wrap = 'word', font = 'Calibri', fg = 'white', bg = 'black', bd = 0)
+    desc = tk_window.Text(rand.window, height = 4, width = 40, wrap = 'word', font = 'Calibri', fg = 'white', bg = 'black', bd = 0)
     desc.tag_configure("center",justify = 'center')
-    desc.insert(tk_window.INSERT ,'This app generates a random password between the length of 14 to 18 characters. ' \
+    desc.insert(tk_window.INSERT ,'This app generates a random password. ' \
         + 'The app will generate a file with your credentials on your desktop.')
     desc.tag_add("center","1.0","end")
     desc.pack()
@@ -111,22 +117,27 @@ if __name__ == "__main__":
     get_username = tk_window.Entry(rand.window, bg = 'gray20', fg = 'white')
     get_username.pack()
 
-    #create an empty space for visuals
-    empty = tk_window.Label(rand.window, bg = 'black')
-    empty.pack()
+    uppercase_needed = IntVar()
+    uppercase = tk_window.Checkbutton(rand.window, text = "Uppercase Needed", variable = uppercase_needed, bg = 'black', fg = 'white', activebackground = 'black', activeforeground = 'white', selectcolor = 'black')
+    uppercase.pack()
+
+    special_char_needed = IntVar()
+    special_char = tk_window.Checkbutton(rand.window, text = "Special Char Needed", variable = special_char_needed, bg = 'black', fg = 'white', activebackground = 'black', activeforeground = 'white', selectcolor = 'black')
+    special_char.pack()
 
     empty = tk_window.Label(rand.window, bg = 'black')
+    empty.pack()
     ufprompt = tk_window.Label(rand.window, bg = 'black', fg = 'white', text = 'Your password: ')
     generated_pass = tk_window.Text(rand.window, bg = 'gray20', fg = 'gray93', height = 2, width = 25)
     generated_pass.configure(state = 'disabled')
 
-    gen_pass = rand.gen_pass_method(RandomPassGen.length)
+    # gen_pass = rand.gen_pass_method(RandomPassGen.length, uppercase_needed, special_char_needed)
 
     #create ok button and attach enter key press to the button
     get_ok = tk_window.Button(rand.window, text = 'OK', font = 'bold', height = 2, width = 10 , bg = 'black', fg = 'white', \
-        command = lambda : rand.button_click(get_username, get_file_name, generated_pass)) #using lambda to pass function with parameters
+        command = lambda : rand.button_click(get_username, get_file_name, generated_pass, uppercase_needed, special_char_needed)) #using lambda to pass function with parameters
     get_ok.pack()
-    rand.window.bind('<Return>', lambda event :rand.button_click(get_username, get_file_name, generated_pass))
+    rand.window.bind('<Return>', lambda event :rand.button_click(get_username, get_file_name, generated_pass, uppercase_needed, special_char_needed))
 
     empty.pack()
     ufprompt.pack()
