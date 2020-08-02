@@ -13,7 +13,7 @@ random
 os
 ```
 
-- **Note:** If using the `.pyw` file, then `psycopg2` will also need to be installed.
+- **Note:** The `.pyw` file should not be used, it is for personal use 
 
 ### Installing
 
