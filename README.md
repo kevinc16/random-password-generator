@@ -13,6 +13,9 @@ random
 os
 ```
 
+### Note
+If using the `.pyw` file, then `psycopg2` will also need to be installed.
+
 ### Installing
 
 [Installation](https://www.ics.uci.edu/~pattis/common/handouts/pythoneclipsejava/python.html)
